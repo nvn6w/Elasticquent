@@ -56,7 +56,9 @@ trait ElasticquentCollectionTrait
 
             // Check for errors
             if ( (array_key_exists('errors', $result) && $result['errors'] != false ) || (array_key_exists('Message', $result) && stristr('Request size exceeded', $result['Message']) !== false)) {
-                break;
+                if(!isset($result['items']) && count($result['items']) != self::$entriesToSendToElasticSearchInOneGo) {
+                    break;
+                }
             }
 
             // Remove vars immediately to prevent them hanging around in memory, in case we have a large number of iterations

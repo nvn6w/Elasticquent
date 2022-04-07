@@ -63,7 +63,7 @@ class ElasticquentResultCollection extends \Illuminate\Database\Eloquent\Collect
      */
     public function totalHits()
     {
-        return $this->hits['total'];
+        return is_array($this->hits['total']) && isset($this->hits['total']['value']) ? $this->hits['total']['value'] : $this->hits['total'];
     }
 
     /**
@@ -142,7 +142,7 @@ class ElasticquentResultCollection extends \Illuminate\Database\Eloquent\Collect
     public function paginate($pageLimit = 25)
     {
         $page = Paginator::resolveCurrentPage() ?: 1;
-       
+
         return new Paginator($this->items, $this->hits, $this->totalHits(), $pageLimit, $page, ['path' => Paginator::resolveCurrentPath()]);
     }
 }
