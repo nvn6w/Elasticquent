@@ -513,6 +513,7 @@ trait ElasticquentTrait
         $client = $instance->getElasticSearchClient();
 
         $index = array(
+            'include_type_name' => true, //ES7 support
             'index' => $instance->getIndexName(),
         );
 
