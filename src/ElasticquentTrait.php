@@ -513,7 +513,6 @@ trait ElasticquentTrait
         $client = $instance->getElasticSearchClient();
 
         $index = array(
-            'include_type_name' => true, //ES7 support
             'index' => $instance->getIndexName(),
         );
 
@@ -532,10 +531,7 @@ trait ElasticquentTrait
 
         $mappingProperties = $instance->getMappingProperties();
         if (!is_null($mappingProperties)) {
-            $index['body']['mappings'][$instance->getTypeName()] = [
-                '_source' => array('enabled' => true),
-                'properties' => $mappingProperties,
-            ];
+            $index['body']['mappings']['properties'] = $mappingProperties;
         }
 
         return $client->indices()->create($index);
@@ -587,14 +583,14 @@ trait ElasticquentTrait
     public function newFromHitBuilder($hit = array())
     {
         $key_name = $this->getKeyName();
-        
+
         $attributes = $hit['_source'];
 
         if (isset($hit['_id'])) {
             $idAsInteger = intval($hit['_id']);
             $attributes[$key_name] = $idAsInteger ? $idAsInteger : $hit['_id'];
         }
-        
+
         // Add fields to attributes
         if (isset($hit['fields'])) {
             foreach ($hit['fields'] as $key => $value) {
@@ -687,7 +683,7 @@ trait ElasticquentTrait
         $items = array_map(function ($item) use ($instance, $parentRelation) {
             // Convert all null relations into empty arrays
             $item = $item ?: [];
-            
+
             return static::newFromBuilderRecursive($instance, $item, $parentRelation);
         }, $items);
 
