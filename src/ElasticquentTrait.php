@@ -2,6 +2,9 @@
 
 namespace Elasticquent;
 
+use Elastic\Elasticsearch\Exception\ClientResponseException;
+use Elastic\Elasticsearch\Exception\ConfigException;
+use Elastic\Elasticsearch\Exception\ServerResponseException;
 use Exception;
 use ReflectionMethod;
 use Illuminate\Database\Eloquent\Model;
@@ -215,11 +218,12 @@ trait ElasticquentTrait
      * @param array $query
      * @param array $aggregations
      * @param array $sourceFields
-     * @param int   $limit
-     * @param int   $offset
+     * @param int $limit
+     * @param int $offset
      * @param array $sort
      *
      * @return ElasticquentResultCollection
+     * @throws ConfigException
      */
     public static function searchByQuery($query = null, $aggregations = null, $sourceFields = null, $limit = null, $offset = null, $sort = null)
     {
@@ -255,6 +259,7 @@ trait ElasticquentTrait
      *
      * @param  $params parameters to be passed directly to Elasticsearch
      * @return ElasticquentResultCollection
+     * @throws ConfigException
      */
     public static function complexSearch($params)
     {
@@ -273,6 +278,7 @@ trait ElasticquentTrait
      * @param string $term
      *
      * @return ElasticquentResultCollection
+     * @throws ConfigException
      */
     public static function search($term = '')
     {
@@ -290,8 +296,8 @@ trait ElasticquentTrait
     /**
      * Add to Search Index
      *
+     * @return array|\Elastic\Elasticsearch\Response\Elasticsearch|\Http\Promise\Promise
      * @throws Exception
-     * @return array
      */
     public function addToIndex()
     {
@@ -317,7 +323,7 @@ trait ElasticquentTrait
     /**
      * Remove From Search Index
      *
-     * @return array
+     * @return array|\Elastic\Elasticsearch\Response\Elasticsearch|\Http\Promise\Promise
      */
     public function removeFromIndex()
     {
@@ -327,7 +333,7 @@ trait ElasticquentTrait
     /**
      * Partial Update to Indexed Document
      *
-     * @return array
+     * @return array|\Elastic\Elasticsearch\Response\Elasticsearch|\Http\Promise\Promise
      */
     public function updateIndex()
     {
@@ -345,7 +351,7 @@ trait ElasticquentTrait
      * Retrieve an ElasticSearch document
      * for this entity.
      *
-     * @return array
+     * @return array|\Elastic\Elasticsearch\Response\Elasticsearch|\Http\Promise\Promise
      */
     public function getIndexedDocument()
     {
@@ -427,7 +433,7 @@ trait ElasticquentTrait
     /**
      * Get Mapping
      *
-     * @return void
+     * @return array|\Elastic\Elasticsearch\Response\Elasticsearch|\Http\Promise\Promise
      */
     public static function getMapping()
     {
@@ -443,7 +449,7 @@ trait ElasticquentTrait
      *
      * @param bool $ignoreConflicts
      *
-     * @return array
+     * @return array|\Elastic\Elasticsearch\Response\Elasticsearch|\Http\Promise\Promise
      */
     public static function putMapping($ignoreConflicts = false)
     {
@@ -465,6 +471,7 @@ trait ElasticquentTrait
      * Delete Mapping
      *
      * @return array
+     * @throws ConfigException
      */
     public static function deleteMapping()
     {
@@ -504,7 +511,7 @@ trait ElasticquentTrait
      * @param int $shards
      * @param int $replicas
      *
-     * @return array
+     * @return array|\Elastic\Elasticsearch\Response\Elasticsearch|\Http\Promise\Promise
      */
     public static function createIndex($shards = null, $replicas = null)
     {
@@ -540,7 +547,7 @@ trait ElasticquentTrait
     /**
      * Delete Index
      *
-     * @return array
+     * @return array|\Elastic\Elasticsearch\Response\Elasticsearch|\Http\Promise\Promise
      */
     public static function deleteIndex()
     {
