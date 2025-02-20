@@ -44,7 +44,7 @@ trait ElasticquentCollectionTrait
                 $params['body'][] = array(
                     'index' => array(
                         '_id' => $item->getKey(),
-                        '_type' => $item->getTypeName(),
+//                        '_type' => $item->getTypeName(),
                         '_index' => $item->getIndexName(),
                     ),
                 );
@@ -54,9 +54,10 @@ trait ElasticquentCollectionTrait
 
             $result = $this->getElasticSearchClient()->bulk($params);
 
+            $resp = json_decode($result->asString(), true);
             // Check for errors
-            if ( (array_key_exists('errors', $result) && $result['errors'] != false ) || (array_key_exists('Message', $result) && stristr('Request size exceeded', $result['Message']) !== false)) {
-                if(!isset($result['items']) && count($result['items']) != self::$entriesToSendToElasticSearchInOneGo) {
+            if ( (array_key_exists('errors', $resp) && $resp['errors'] != false ) || (array_key_exists('Message', $resp) && stristr('Request size exceeded', $resp['Message']) !== false)) {
+                if(!isset($resp['items']) && count($resp['items']) != self::$entriesToSendToElasticSearchInOneGo) {
                     break;
                 }
             }
