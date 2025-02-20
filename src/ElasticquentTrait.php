@@ -248,7 +248,6 @@ trait ElasticquentTrait
         }
 
         $result = $instance->getElasticSearchClient()->search($params);
-
         return static::hydrateElasticsearchResult($result);
     }
 
@@ -629,7 +628,7 @@ trait ElasticquentTrait
      * @param  array  $result
      * @return \Elasticquent\ElasticquentResultCollection
      */
-    public static function hydrateElasticsearchResult(array $result)
+    public static function hydrateElasticsearchResult(mixed $result)
     {
         if ($result instanceof \Elastic\Elasticsearch\Response\Elasticsearch) {
             /**
