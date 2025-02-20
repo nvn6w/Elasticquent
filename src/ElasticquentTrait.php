@@ -631,6 +631,13 @@ trait ElasticquentTrait
      */
     public static function hydrateElasticsearchResult(array $result)
     {
+        if ($result instanceof \Elastic\Elasticsearch\Response\Elasticsearch) {
+            /**
+             * @var \Elastic\Elasticsearch\Response\Elasticsearch $result
+             */
+            $result = $result->asArray();
+        }
+        }
         $items = $result['hits']['hits'];
         return static::hydrateElasticquentResult($items, $meta = $result);
     }
