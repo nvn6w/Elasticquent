@@ -637,7 +637,6 @@ trait ElasticquentTrait
              */
             $result = $result->asArray();
         }
-        }
         $items = $result['hits']['hits'];
         return static::hydrateElasticquentResult($items, $meta = $result);
     }
